@@ -5,7 +5,7 @@ let
   yamlFormat = pkgs.formats.yaml {};
   nebulaConfig = {
     pki = {
-      ca = caCertFiles + "/ca.crt";
+      ca = caCertFiles.crt;
       cert = selfCerts.crt;
       key = selfCerts.key;
     };
