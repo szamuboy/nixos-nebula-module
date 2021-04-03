@@ -1,11 +1,13 @@
 { pkgs, caCertFiles, ip, name } :
 let
   keyPub = pkgs.runCommandNoCC "nebula-keypub" {
-    inherit caCertFiles ip name;
+    inherit ip name;
     buildInputs = [ pkgs.nebula ];
+    caCrt = caCertFiles.crt;
+    caKey = caCertFiles.key;
   } ''
     mkdir $out
-    nebula-cert sign -ca-crt $caCertFiles/ca.crt -ca-key $caCertFiles/ca.key \
+    nebula-cert sign -ca-crt $caCrt -ca-key $caKey \
                      -out-crt $out/$name.crt -out-key $out/$name.key       \
                      -ip $ip -name $name
   '';
