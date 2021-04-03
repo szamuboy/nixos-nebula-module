@@ -54,12 +54,10 @@ let
     };
   };
   nebulaConfigYaml = yamlFormat.generate "nebula-config-yaml" nebulaConfig;
-  caCertFiles = pkgs.runCommandNoCC "nebula-certs" {
-    buildInputs = [ pkgs.nebula ];
-  } ''
-    mkdir $out
-    nebula-cert ca -name nebula -out-crt $out/ca.crt -out-key $out/ca.key
-  '';
+  caCertFiles = import ./nebula-ca.nix {
+    inherit pkgs;
+    name = cfg.hostname;
+  };
   selfCerts = import ./nebula-sign.nix {
     inherit caCertFiles pkgs;
     ip = cfg.ipCidr;
